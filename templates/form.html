@@ -1,0 +1,129 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% load widget_tweaks %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card card-body">
+                <h5>Default Form Elements</h5>
+                <p class="card-subtitle mb-3">
+                    All bootstrap element classies
+                </p>
+
+                <form class="form-horizontal" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="{{ action }}">
+
+                    {% if form.errors %}
+                        <div class="alert alert-danger alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <h5><i class="icon fas fa-ban"></i> Error al guardar!</h5>
+                            <ul>
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+
+                    {% for field in form.visible_fields %}
+
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}">
+                                <span class="help"> {{ field.label }} </span>
+                            </label>
+                            {{ field|add_class:'form-control'|attr:'autocomplete:off' }}
+                        </div>
+                    {% endfor %}
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-outline-primary btn-flat btntest"><i
+                                class="fas fa-save me-1"></i> Guardar Registro
+                        </button>
+                        <a href="{{ list_url }}" class="btn btn-outline-danger btn-flat">
+                            <i class="fas fa-times me-1"></i> Cancelar
+                        </a>
+                    </div>
+
+
+{% endblock %}
+
+{% block custom_js %}
+    <script>
+        {% if form.errors %}
+            let errors = '';
+            {% for field in form %}
+                {% for error in field.errors %}
+                    errors += '{{ error }}\n';
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                errors += '{{ error }}\n';
+            {% endfor %}
+            
+            toastr.error(
+                errors,
+                "Top Right!",
+                {
+                    positionClass: "toastr toast-top-right",
+                    containerId: "toast-top-right",
+                    closeButton: true,
+                    progressBar: true,
+                    timeOut: 3000,
+                }
+            );
+        {% endif %}
+
+        $('form').on('submit', function (e) {
+            e.preventDefault()
+            //let parameters = $(this).serializeArray()
+            let parameters = new FormData(this)
+
+            /*parameters.forEach((value, key) => {
+                console.log(key+': '+value)
+            })*/
+            
+            // Selecciona el botón de envío
+            let submitButton = $(this).find('button[type="submit"]');
+        
+            // Guarda el HTML original del botón
+            let originalButtonHTML = submitButton.html();
+        
+            // Cambia el botón por el botón deshabilitado con el spinner
+            submitButton.removeClass('btn-outline-primary');
+            submitButton.addClass('btn-outline-warning');
+            submitButton.html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> Guardando...');
+            submitButton.prop('disabled', true);
+
+
+            submit_with_ajax(window.location.pathname, 'Confirmación', '¿Estas seguro de realizar esta acción?', parameters, function () {
+                toastr.success(
+                    "Registro guardado con exito!",
+                    "Excelente!",
+                    {
+                        positionClass: "toastr toast-top-right",
+                        containerId: "toast-top-right",
+                        closeButton: true,
+                        progressBar: true,
+                        timeOut: 3000,
+                        onHidden: function() {
+                            location.href = '{{ list_url }}'; // Refrescar la página cuando la notificación se oculta
+                        }
+                    }
+                );
+                
+                submitButton.removeClass('btn-outline-warning');
+                submitButton.html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> Exito...');
+                submitButton.addClass('btn-outline-success');
+            }, function () {
+                location.href = '{{ list_url }}';
+                // Restaura el botón a su estado original
+                submitButton.html(originalButtonHTML);
+                submitButton.prop('disabled', false);
+            });
+        });
+    </script>
+{% endblock %}

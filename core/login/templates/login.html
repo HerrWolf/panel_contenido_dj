@@ -1,0 +1,87 @@
+{% load static %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- Title -->
+    <title>{{ title }}</title>
+    <!-- Required Meta Tag -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="handheldfriendly" content="true"/>
+    <meta name="MobileOptimized" content="width"/>
+    <meta name="description" content="Mordenize"/>
+    <meta name="author" content=""/>
+    <meta name="keywords" content="Mordenize"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" href="{% static 'modernize/dist/images/logos/favicon.ico' %}"/>
+    <!-- Owl Carousel -->
+    <link rel="stylesheet" href="{% static 'modernize/dist/libs/owl.carousel/dist/assets/owl.carousel.min.css' %}">
+    <!-- Core Css -->
+    <link rel="stylesheet" href="{% static 'modernize/dist/css/style-dark.min.css' %}"/>
+</head>
+<body data-theme="dark">
+<!-- Preloader -->
+<div class="preloader">
+    <img src="{% static 'modernize/dist/images/logos/favicon.ico' %}" alt="loader" class="lds-ripple img-fluid"/>
+</div>
+<!-- Body Wrapper -->
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+     data-sidebar-position="fixed" data-header-position="fixed">
+    <div class="position-relative overflow-hidden radial-gradient min-vh-100">
+        <div class="position-relative z-index-5">
+            <div class="row">
+                <div class="col-xl-7 col-xxl-8">
+                    <a href="./index.html" class="text-nowrap logo-img d-block px-4 py-9 w-100">
+                        <img src="{% static 'modernize/dist/images/logos/light-logo.svg' %}" width="180" alt="">
+                    </a>
+                    <div class="d-none d-xl-flex align-items-center justify-content-center"
+                         style="height: calc(100vh - 80px);">
+                        <img src="{% static 'modernize/dist/images/backgrounds/login-security.svg' %}" alt=""
+                             class="img-fluid" width="500">
+                    </div>
+                </div>
+                <div class="col-xl-5 col-xxl-4">
+                    <div class="authentication-login min-vh-100 bg-body row justify-content-center align-items-center p-4">
+                        <div class="col-sm-8 col-md-6 col-xl-9">
+                            <h2 class="mb-3 fs-7 fw-bolder">Bienvenido</h2>
+                            <p class=" mb-9">Panel de administración</p>
+                            <form id="formAuthentication" method="post">
+                                <input type="hidden" name="next" value="{{ next }}">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Nombre de usuario</label>
+                                    {{ form.username|add_class:'form-control'|attr:'autocomplete:off'|attr:'placeholder:Ingrese su nombre de usuario' }}
+                                </div>
+                                <div class="mb-4">
+                                    <label for="password" class="form-label">Contraseña</label>
+                                    {{ form.password|add_class:'form-control'|attr:'placeholder:Ingrese su contraseña'|attr:'id:password'|attr:'aria-describedby:password' }}
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100 py-8 mb-4 rounded-2">Inicia sesión</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Import Js Files -->
+<script src="{% static 'modernize/dist/libs/jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'modernize/dist/libs/simplebar/dist/simplebar.min.js' %}"></script>
+<script src="{% static 'modernize/dist/libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+<!-- core files -->
+<script src="{% static 'modernize/dist/js/app.min.js' %}"></script>
+<script src="{% static 'modernize/dist/js/app.dark.init.js' %}"></script>
+<script src="{% static 'modernize/dist/js/app-style-switcher.js' %}"></script>
+<script src="{% static 'modernize/dist/js/sidebarmenu.js' %}"></script>
+
+<script src="{% static 'modernize/dist/js/custom.js' %}"></script>
+<!-- current page js files -->
+<script src="{% static 'modernize/dist/libs/owl.carousel/dist/owl.carousel.min.js' %}"></script>
+</body>
+</html>

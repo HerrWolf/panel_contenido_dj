@@ -1,0 +1,9 @@
+.dataTables_wrapper .row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.dataTables_wrapper .col-sm-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+}

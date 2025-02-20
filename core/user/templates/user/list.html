@@ -1,0 +1,59 @@
+{% extends 'list.html' %}
+
+{% load static %}
+
+{% block buttons_list %}
+    <div class="button-group">
+        <button type="button" class="btn mb-1 waves-effect waves-light btn-rounded btn-outline-primary" id="btn-add-new-user">
+            <i class="ti ti-user-plus fs-4 me-1"></i>
+            Agregar usuario
+        </button>
+    </div>
+{% endblock %}
+
+{% block columns %}
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Username</th>
+        <th scope="col">Fecha de registro</th>
+        <th scope="col">Imagen</th>
+        <th scope="col">Grupos</th>
+        <th scope="col">Opciones</th>
+    </tr>
+{% endblock %}
+
+{% block rows %}{% endblock %}
+
+
+{% block f_columns %}
+    <tr>
+        <th rowspan="1" colspan="1">id</th>
+        <th rowspan="1" colspan="1">Nombre</th>
+        <th rowspan="1" colspan="1">Username</th>
+        <th rowspan="1" colspan="1">Fecha de registro</th>
+        <th rowspan="1" colspan="1">Imagen</th>
+        <th rowspan="1" colspan="1">Grupos</th>
+        <th rowspan="1" colspan="1">Opciones</th>
+    </tr>
+{% endblock %}
+
+{% block custom_js %}
+    <script src="{% static 'user/js/list.js' %}"></script>
+{#    <script>#}
+{#        toastr.info(#}
+{#            "Hello, welcome to the dashboard!",#}
+{#            "Top Right!",#}
+{#            {#}
+{#                positionClass: "toastr toast-top-right",#}
+{#                containerId: "toast-top-right",#}
+{#                closeButton: true,#}
+{#                progressBar: true,#}
+{#                timeOut: 3000,#}
+{#                /*onHidden: function() {#}
+{#                    location.reload(); // Refrescar la página cuando la notificación se oculta#}
+{#                }*/#}
+{#            }#}
+{#        );#}
+{#    </script>#}
+{% endblock %}
