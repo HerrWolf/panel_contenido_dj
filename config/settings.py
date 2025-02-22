@@ -1,3 +1,4 @@
+# app/config/settings.py
 """
 Django settings for config project.
 
@@ -50,6 +51,9 @@ INSTALLED_APPS = [
     # apps
     "core.dashboard",
     'core.login',
+    'core.app1_fuss',
+    'core.xui',
+    'core.xui_one'
 ]
 
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
@@ -93,8 +97,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = db.SQLITE
+DATABASES = db.DB_SYSTEM
 
+DATABASE_ROUTERS = [
+    'config.db_router.DbRouter',
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
