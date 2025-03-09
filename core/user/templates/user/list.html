@@ -1,10 +1,12 @@
 {% extends 'list.html' %}
+{#{% extends 'user/basic_table.html' %}#}
 
 {% load static %}
 
 {% block buttons_list %}
     <div class="button-group">
-        <button type="button" class="btn mb-1 waves-effect waves-light btn-rounded btn-outline-primary" id="btn-add-new-user">
+        <button type="button" class="btn mb-1 btn-lg px-4 fs-4 font-medium btn-light-primary text-primary"
+                data-bs-toggle="modal" data-bs-target="#user-modal">
             <i class="ti ti-user-plus fs-4 me-1"></i>
             Agregar usuario
         </button>
@@ -14,46 +16,86 @@
 {% block columns %}
     <tr>
         <th scope="col">ID</th>
-        <th scope="col">Nombre</th>
         <th scope="col">Username</th>
-        <th scope="col">Fecha de registro</th>
-        <th scope="col">Imagen</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Ultimo login</th>
         <th scope="col">Grupos</th>
-        <th scope="col">Opciones</th>
+        <th scope="col"></th>
     </tr>
 {% endblock %}
 
-{% block rows %}{% endblock %}
+{% block rows %}
+    {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>
+                <div class="d-flex align-items-center">
+                    <img src="/{{ user.get_image }}" class="rounded-circle" width="40" height="40">
+                    <div class="ms-3">
+                        <h6 class="fs-4 fw-semibold mb-0">{{ user.username }}</h6>
+                    </div>
+                </div>
+            </td>
+            <td>{{ user.get_full_name }}</td>
+            <td>
+                {% if user.last_login %}
+                    {{ user.last_login }}
+                {% else %}
+                    No ha iniciado sesión
+                {% endif %}
+            </td>
+
+            <td>
+                {% for group in user.groups.all %}
+                    {{ group.name }}{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                    Sin grupos
+                {% endfor %}
+            </td>
+            <td>
+                <div class="dropdown dropstart">
+                    <a href="#" class="text-muted" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        <i class="ti ti-dots-vertical fs-6"></i>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center gap-3" href="#"><i
+                                    class="fs-4 ti ti-edit"></i>Edit</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center gap-3" href="#"><i
+                                    class="fs-4 ti ti-trash"></i>Delete</a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+
+{% endblock %}
 
 
 {% block f_columns %}
     <tr>
-        <th rowspan="1" colspan="1">id</th>
-        <th rowspan="1" colspan="1">Nombre</th>
+        <th rowspan="1" colspan="1">ID</th>
         <th rowspan="1" colspan="1">Username</th>
+        <th rowspan="1" colspan="1">Nombre</th>
         <th rowspan="1" colspan="1">Fecha de registro</th>
-        <th rowspan="1" colspan="1">Imagen</th>
         <th rowspan="1" colspan="1">Grupos</th>
-        <th rowspan="1" colspan="1">Opciones</th>
+        <th rowspan="1" colspan="1"></th>
     </tr>
 {% endblock %}
 
 {% block custom_js %}
     <script src="{% static 'user/js/list.js' %}"></script>
-{#    <script>#}
-{#        toastr.info(#}
-{#            "Hello, welcome to the dashboard!",#}
-{#            "Top Right!",#}
-{#            {#}
-{#                positionClass: "toastr toast-top-right",#}
-{#                containerId: "toast-top-right",#}
-{#                closeButton: true,#}
-{#                progressBar: true,#}
-{#                timeOut: 3000,#}
-{#                /*onHidden: function() {#}
-{#                    location.reload(); // Refrescar la página cuando la notificación se oculta#}
-{#                }*/#}
-{#            }#}
-{#        );#}
-{#    </script>#}
+
+    {% include 'user/partials/modal.html' %}
+
+    <script>
+        document.body.addEventListener('close-modal', function () {
+            var modal = bootstrap.Modal.getInstance(document.getElementById('user-modal'));
+            modal.hide();
+        });
+    </script>
 {% endblock %}

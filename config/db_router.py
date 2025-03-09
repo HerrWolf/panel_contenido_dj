@@ -4,6 +4,8 @@ class DbRouter:
             return "default"
         elif model._meta.app_label == 'app1_fuss':
             return "app1_fuss_db"
+        elif model._meta.app_label == 'app1_bixi':
+            return "app1_bixi_db"
         elif model._meta.app_label == 'xui':
             return "xui_db"
         elif model._meta.app_label == 'xui_one':

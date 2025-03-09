@@ -47,13 +47,15 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'django_cleanup.apps.CleanupConfig',
     'dbbackup',
+    'django_htmx',
     "core.user",
     # apps
     "core.dashboard",
     'core.login',
     'core.app1_fuss',
     'core.xui',
-    'core.xui_one'
+    'core.xui_one',
+    'core.app1_bixi'
 ]
 
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
@@ -64,6 +66,7 @@ CRONJOBS = [
 ]
 
 MIDDLEWARE = [
+    'django_htmx.middleware.HtmxMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

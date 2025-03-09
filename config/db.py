@@ -24,6 +24,14 @@ DB_SYSTEM = {
         'HOST': config('APP1_FUSS_DB_HOST'),
         'PORT': '3306',
     },
+    'app1_bixi_db': {  # Primera base de datos externa
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': config('APP1_BIXI_DB_NAME'),
+        'USER': config('APP1_BIXI_DB_USER'),
+        'PASSWORD': '',
+        'HOST': config('APP1_BIXI_DB_HOST'),
+        'PORT': '3306',
+    },
     'xui_db': {  # Segunda base de datos externa
         'ENGINE': 'django.db.backends.mysql',
         'NAME': config('XUI_DB_NAME'),
