@@ -26,7 +26,7 @@
                   enctype="multipart/form-data"
             >
                 <div class="modal-body">
-{#                    {{ form.as_p }}#}
+                    {#                    {{ form.as_p }}#}
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-md-6">
@@ -67,13 +67,13 @@
                         </div>
                     </div>
 
-{#                    <div class="col-md-12">#}
-{#                        <div class="mb-3">#}
-{#                            <label for="id_groups">{{ form.groups.label }}</label>#}
-{#                            {{ form.groups|add_class:"form-control" }}#}
-{#                            <span class="helptext" id="id_groups_helptext">Los grupos a los que pertenece este usuario. Un usuario obtendrá todos los permisos concedidos para cada uno de su grupo.</span>#}
-{#                        </div>#}
-{#                    </div>#}
+                    {#                    <div class="col-md-12">#}
+                    {#                        <div class="mb-3">#}
+                    {#                            <label for="id_groups">{{ form.groups.label }}</label>#}
+                    {#                            {{ form.groups|add_class:"form-control" }}#}
+                    {#                            <span class="helptext" id="id_groups_helptext">Los grupos a los que pertenece este usuario. Un usuario obtendrá todos los permisos concedidos para cada uno de su grupo.</span>#}
+                    {#                        </div>#}
+                    {#                    </div>#}
                 </div>
                 <div class="modal-footer">
                     <button

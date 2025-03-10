@@ -1,7 +1,7 @@
-<tr>
+<tr id="user-row-{{ user.id }}">
     <td>{{ user.id }}</td>
     <td>
-        <div class="d-flex align-items-center">
+        <div class=" d-flex align-items-center">
             <img src="/{{ user.get_image }}" class="rounded-circle" width="40" height="40">
             <div class="ms-3">
                 <h6 class="fs-4 fw-semibold mb-0">{{ user.username }}</h6>
@@ -32,12 +32,34 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <li>
-                    <a class="dropdown-item d-flex align-items-center gap-3" href="#"><i
-                            class="fs-4 ti ti-edit"></i>Edit</a>
+                    <button
+                        class="dropdown-item d-flex align-items-center gap-3"
+                        hx-get="{% url 'user_list' %}?edit={{ user.id }}"
+                        hx-target="#user-form"
+                        hx-swap="outerHTML"
+                        hx-trigger="click"
+                        data-bs-toggle="modal"
+                        data-bs-target="#user-modal"
+                    >
+                        <i class="fs-4 ti ti-edit"></i>Edit
+                    </button>
                 </li>
                 <li>
-                    <a class="dropdown-item d-flex align-items-center gap-3" href="#"><i
-                            class="fs-4 ti ti-trash"></i>Delete</a>
+                    <form
+                        hx-delete="{% url 'user_delete' user.id %}"
+                        hx-target="#user-row-{{ user.id }}"
+                        hx-swap="delete"
+                        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                        hx-trigger="deleteConfirmed"
+                    >
+                        <button
+                                class="dropdown-item d-flex align-items-center gap-3"
+                                onclick="confirmDelete(event)"
+                        >
+                            <i class="fs-4 ti ti-trash"></i>
+                            Delete
+                        </button>
+                    </form>
                 </li>
             </ul>
         </div>

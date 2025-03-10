@@ -1,118 +1,44 @@
-function message_error(obj) {
-    let html = '';
-    if (typeof (obj) === 'object') {
-        html = '<ul>';
-        $.each(obj, function (key, value) {
-            html += '<li style="text-align: left">' + key + ': ' + value + '</li>'
-        })
-        html += '</ul>'
-    } else {
-        html = '<p>' + obj + '</p>'
+document.body.addEventListener('htmx:afterRequest', function (event) {
+    const trigger = event.detail.xhr.getResponseHeader('HX-Trigger');
+    if (trigger) {
+        const triggers = JSON.parse(trigger);
+        if (triggers['show-toast']) {
+            const toast = triggers['show-toast'];
+            // Usar toastr con título y mensaje
+            toastr[toast.type](toast.message, toast.title);
+        }
     }
+});
 
-    toastr.error(
-        html,
-        "Error!",
-        {
-            positionClass: "toastr toast-top-right",
-            containerId: "toast-top-right",
-            closeButton: true,
-            progressBar: true,
-            timeOut: 3000,
+document.body.addEventListener('htmx:responseError', function (event) {
+    const response = event.detail.xhr.response;
+    try {
+        const data = JSON.parse(response);
+        if (data.errors) {
+            for (const [field, error] of Object.entries(data.errors)) {
+                toastr.error(`${field}: ${error}`);
+            }
         }
-    );
-}
+    } catch (e) {
+        console.error("Error parsing response:", e);
+    }
+});
 
-function submit_with_ajax(url, title, content, parameters, callback, cancel) {
+document.body.addEventListener('htmx:afterRequest', function (event) {
+  // Verifica si la solicitud fue exitosa y corresponde a una eliminación
+  if (event.detail.successful && event.detail.elt.closest('form[hx-delete]')) {
+    const userId = event.detail.elt.closest('tr').id;
+    const row = document.getElementById(userId);
+    if (row) row.remove();  // Elimina la fila manualmente
+  }
 
-    $.confirm({
-        theme: 'supervan',
-        title: title,
-        icon: 'fa fa-info',
-        content: content,
-        columnClass: 'medium',
-        typeAnimated: true,
-        cancelButtonClass: 'btn-primary',
-        draggable: true,
-        dragWindowBorder: false,
-        buttons: {
-            info: {
-                text: "Si",
-                btnClass: 'btn-blue',
-                action: function () {
-                    $.ajax({
-                        url: url,
-                        type: 'POST',
-                        data: parameters,
-                        dataType: 'json',
-                        processData: false,
-                        contentType: false,
-                    }).done(function (data) {
-                        if (!data.hasOwnProperty('error')) {
-                            callback(data);
-                            return false;
-                        }
-                        message_error(data.error);
-                    }).fail(function (jqXHR, textSatus, errorThrown) {
-                        console.log(jqXHR)
-                        console.log(textSatus)
-                        console.log(errorThrown)
-
-                        toastr.error(
-                            errorThrown,
-                            "Error!",
-                            {
-                                positionClass: "toastr toast-top-right",
-                                containerId: "toast-top-right",
-                                closeButton: true,
-                                progressBar: true,
-                                timeOut: 3000,
-                            }
-                        );
-                    })
-                }
-            },
-            danger: {
-                text: "No",
-                btnClass: 'btn-red',
-                action: function () {
-                    cancel()
-                    return false;
-                }
-            },
-        }
-    })
-
-}
-
-function alert_action(title, content, callback, cancel) {
-
-    $.confirm({
-        theme: 'supervan',
-        title: title,
-        icon: 'fa fa-info',
-        content: content,
-        columnClass: 'medium',
-        typeAnimated: true,
-        cancelButtonClass: 'btn-primary',
-        draggable: true,
-        dragWindowBorder: false,
-        buttons: {
-            info: {
-                text: "Si",
-                btnClass: 'btn-primary',
-                action: function () {
-                    callback();
-                }
-            },
-            danger: {
-                text: "No",
-                btnClass: 'btn-red',
-                action: function () {
-                    cancel();
-                }
-            },
-        }
-    })
-
-}
+  // Notificaciones con Toastr
+  const trigger = event.detail.xhr.getResponseHeader('HX-Trigger');
+  if (trigger) {
+    const triggers = JSON.parse(trigger);
+    if (triggers['show-toast']) {
+      const toast = triggers['show-toast'];
+      toastr[toast.type](toast.message, toast.title);
+    }
+  }
+});

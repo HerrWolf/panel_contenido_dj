@@ -20,8 +20,13 @@
     <link rel="stylesheet" href="{% static 'modernize/dist/css/style-dark.min.css' %}"/>
 
     <!-- JQuery confirm CSS -->
-{#    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">#}
-    <link rel="stylesheet" href="{% static 'lib/jquery-confirm-v3.3.4/jquery-confirm.min.css' %}">
+    {#    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">#}
+{#    <link rel="stylesheet" href="{% static 'lib/jquery-confirm-v3.3.4/jquery-confirm.min.css' %}">#}
+
+    <!-- Sweet Alert CSS -->
+    <link rel="stylesheet" href="{% static 'modernize/dist/libs/sweetalert2/dist/sweetalert2.min.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css" />
+
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
 
     <!-- Vendors Css -->
@@ -68,7 +73,8 @@
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item">
-                                            <a class="text-white " href="{% url 'home' %}"><i class="ti ti-home"></i> Inicio</a>
+                                            <a class="text-white " href="{% url 'home' %}"><i class="ti ti-home"></i>
+                                                Inicio</a>
                                         </li>
                                         {% if list_url %}
                                             <li class="breadcrumb-item" aria-current="page">
@@ -107,12 +113,26 @@
     <script src="{% static 'modernize/dist/js/custom.js' %}"></script>
     <script src="{% static 'js/toastr_init.js' %}"></script>
 
+    <!-- Sweet Alert JS -->
+    <script src="{% static 'modernize/dist/libs/sweetalert2/dist/sweetalert2.min.js' %}"></script>
+
     <!-- JQuery Confirm JS -->
 
     <script src="{% static 'lib/jquery-confirm-v3.3.4/jquery-confirm.min.js' %}"></script>
 
-    <script src="{% static 'js/functions.js' %}"></script>
 
+    <script>
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            positionClass: "toast-top-right",
+            timeOut: 5000,
+            titleClass: "toast-title",
+            messageClass: "toast-message"
+        };
+    </script>
+
+    <script src="{% static 'js/functions.js' %}"></script>
 
     <!-- Vendor Js -->
     {% block vendor_js %}{% endblock %}
