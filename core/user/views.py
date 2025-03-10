@@ -48,12 +48,23 @@ def user_list_view(request):
     # Si es una solicitud HTMX para cargar el modal de edición
     if request.htmx and request.GET.get('create'):
         form = UserForm()
-        return render(request, 'user/partials/form-create-user.html', {'form': form})
+        form_url = reverse_lazy('user_list')
+        data= {
+            'form': form,
+            'form_url': form_url
+        }
+        return render(request, 'user/partials/form-user.html', data)
 
     if request.htmx and request.GET.get('edit'):
         user = User.objects.get(pk=request.GET.get('edit'))
         form = UserForm(instance=user)
-        return render(request, 'user/partials/form-edit-user.html', {'form': form, 'user': user})
+        form_url = reverse_lazy('user_edit', kwargs={'pk': user.pk})
+        data = {
+            'form': form,
+            'user': user,
+            'form_url': form_url
+        }
+        return render(request, 'user/partials/form-user.html', data)
 
     data = {
         'title': 'Listado de Usuarios',
