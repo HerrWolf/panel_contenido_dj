@@ -34,7 +34,7 @@
                 <li>
                     <button
                         class="dropdown-item d-flex align-items-center gap-3"
-                        hx-get="{% url 'user_list' %}?edit={{ user.id }}"
+                        hx-get="{% url 'user-list' %}?edit={{ user.id }}"
                         hx-target="#user-form"
                         hx-swap="outerHTML"
                         hx-trigger="click"
@@ -46,7 +46,7 @@
                 </li>
                 <li>
                     <form
-                        hx-delete="{% url 'user_delete' user.id %}"
+                        hx-delete="{% url 'user-delete' user.id %}"
                         hx-target="#user-row-{{ user.id }}"
                         hx-swap="delete"
                         hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'

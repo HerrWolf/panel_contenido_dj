@@ -18,55 +18,57 @@
                         aria-label="Close"
                 ></button>
             </div>
-            <form id="user-form"
-                  hx-post="{% url 'user_list' %}"
-                  hx-target="#tbl_user_body"
-                  hx-swap="afterbegin"
-                  hx-on::after-request="this.reset()"
-                  enctype="multipart/form-data"
-            >
-                <div class="modal-body">
+            <div id="user-form"></div>
+{#            TODO eliminar esto mas adelante si no es necesario#}
+{#            <form id="user-form"#}
+{#                  hx-post="{% url 'user-list' %}"#}
+{#                  hx-target="#tbl_user_body"#}
+{#                  hx-swap="afterbegin"#}
+{#                  hx-on::after-request="this.reset()"#}
+{#                  enctype="multipart/form-data"#}
+{#            >#}
+{#                <div class="modal-body">#}
                     {#                    {{ form.as_p }}#}
-                    {% csrf_token %}
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-floating mb-3">
-                                {{ form.first_name|add_class:"form-control"|attr:"autocomplete:off" }}
-                                <label for="id_first_name">{{ form.first_name.label }}</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-floating mb-3">
-                                {{ form.last_name|add_class:"form-control"|attr:"autocomplete:off" }}
-                                <label for="id_last_name">{{ form.last_name.label }}</label>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-floating mb-3">
-                                {{ form.email|add_class:"form-control"|attr:"autocomplete:off" }}
-                                <label for="id_email">{{ form.email.label }}</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-floating mb-3">
-                                {{ form.username|add_class:"form-control"|attr:"autocomplete:off" }}
-                                <label for="id_username">{{ form.username.label }}</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-floating mb-3">
-                                {{ form.password|add_class:"form-control" }}
-                                <label for="id_last_name">{{ form.password.label }}</label>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label>Imagen de perfil:</label>
-                                {{ form.image|add_class:"form-control" }}
-                            </div>
-                        </div>
-                    </div>
-
+{#                    {% csrf_token %}#}
+{#                    <div class="row">#}
+{#                        <div class="col-md-6">#}
+{#                            <div class="form-floating mb-3">#}
+{#                                {{ form.first_name|add_class:"form-control"|attr:"autocomplete:off" }}#}
+{#                                <label for="id_first_name">{{ form.first_name.label }}</label>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="col-md-6">#}
+{#                            <div class="form-floating mb-3">#}
+{#                                {{ form.last_name|add_class:"form-control"|attr:"autocomplete:off" }}#}
+{#                                <label for="id_last_name">{{ form.last_name.label }}</label>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="col-md-12">#}
+{#                            <div class="form-floating mb-3">#}
+{#                                {{ form.email|add_class:"form-control"|attr:"autocomplete:off" }}#}
+{#                                <label for="id_email">{{ form.email.label }}</label>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="col-md-6">#}
+{#                            <div class="form-floating mb-3">#}
+{#                                {{ form.username|add_class:"form-control"|attr:"autocomplete:off" }}#}
+{#                                <label for="id_username">{{ form.username.label }}</label>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="col-md-6">#}
+{#                            <div class="form-floating mb-3">#}
+{#                                {{ form.password|add_class:"form-control" }}#}
+{#                                <label for="id_last_name">{{ form.password.label }}</label>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="col-md-12">#}
+{#                            <div class="mb-3">#}
+{#                                <label>Imagen de perfil:</label>#}
+{#                                {{ form.image|add_class:"form-control" }}#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{##}
                     {#                    <div class="col-md-12">#}
                     {#                        <div class="mb-3">#}
                     {#                            <label for="id_groups">{{ form.groups.label }}</label>#}
@@ -74,21 +76,21 @@
                     {#                            <span class="helptext" id="id_groups_helptext">Los grupos a los que pertenece este usuario. Un usuario obtendrá todos los permisos concedidos para cada uno de su grupo.</span>#}
                     {#                        </div>#}
                     {#                    </div>#}
-                </div>
-                <div class="modal-footer">
-                    <button
-                            type="button"
-                            class="btn btn-light-danger text-danger font-medium"
-                            data-bs-dismiss="modal"
-                    >
-                        Close
-                    </button>
-                    <button class="btn btn-primary">
-                        <i class="ti ti-user-plus fs-4 me-1"></i>
-                        Guardar usuario
-                    </button>
-                </div>
-            </form>
+{#                </div>#}
+{#                <div class="modal-footer">#}
+{#                    <button#}
+{#                            type="button"#}
+{#                            class="btn btn-light-danger text-danger font-medium"#}
+{#                            data-bs-dismiss="modal"#}
+{#                    >#}
+{#                        Close#}
+{#                    </button>#}
+{#                    <button class="btn btn-primary">#}
+{#                        <i class="ti ti-user-plus fs-4 me-1"></i>#}
+{#                        Guardar usuario#}
+{#                    </button>#}
+{#                </div>#}
+{#            </form>#}
         </div>
     </div>
 </div>

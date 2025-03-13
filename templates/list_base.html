@@ -27,13 +27,24 @@
                                 <h5 class="mb-0">{{ table_title }}</h5>
                             </div>
                             <div class="ms-auto flex-shrink-0">
-                                <input type="text́" class="form-control">
+                                <input type="text" class="form-control"
+                                       id="table-search-input"
+                                       name="search"
+                                       placeholder="Search..."
+                                       hx-get="{{ list_url }}"
+                                       hx-trigger="keyup changed delay:500ms"
+                                       hx-target="#{{ table_id }}_body"
+                                       hx-indicator="#search-indicator">
+                                <span id="search-indicator"
+                                      class="htmx-indicator spinner-border spinner-border-sm text-primary ms-2"
+                                      role="status"></span>
                             </div>
                         </div>
 
                         <!-- Table -->
                         <div class="table-responsive rounded-2 mb-4">
-                            <table class="table border text-nowrap customize-table mb-0 align-middle" id="{{ table_id }}">
+                            <table class="table border text-nowrap customize-table mb-0 align-middle"
+                                   id="{{ table_id }}">
                                 <thead class="text-dark fs-4">
                                 {% block columns %}{% endblock %}
                                 </thead>

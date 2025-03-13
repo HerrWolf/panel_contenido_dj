@@ -1,10 +1,20 @@
 from django.urls import path
 
-from core.dashboard.views.views import HomeView, test, testAddCategory, testDeleteCategory, testSearchMovieData, \
+from core.dashboard.views.category.views import *
+from core.dashboard.views.dashboard.views import HomeView
+from core.dashboard.views.test.views import test, testAddCategory, testDeleteCategory, testSearchMovieData, \
     testSeasonInfo, testEpisodeInfo, testGetCategories
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
+    path('category/', category_list_view, name='category-list-view'),
+    path('category/create/', category_create_view, name='category-create-view'),
+    path('category/<int:pk>/edit/', category_edit_view, name='category-edit-view'),
+    path('category/<int:pk>/delete/', category_delete_view, name='category-delete-view'),
+
+
+
+
     path('test/', test, name='test'),
     path('test/add-category/', testAddCategory, name='test-add-category'),
     path('test/get-categories/', testGetCategories, name='test-get-category'),

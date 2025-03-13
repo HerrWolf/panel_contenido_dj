@@ -1,0 +1,49 @@
+{% load widget_tweaks %}
+
+<!-- Actualizar el título del modal usando hx-swap-oob -->
+<h4 id="categoryModalLabel" hx-swap-oob="true">{{ modal_title }}</h4>
+
+<form id="category-form"
+    hx-post="{{ form_url }}"
+    {% if form_url == '/dashboard/category/create/' %}
+      hx-target="#tbl_category_body"
+      hx-swap="afterbegin"
+    {% else %}
+      hx-target="#category-row-{{ category.id }}"
+      hx-swap="outerHTML"
+    {% endif %}
+    hx-on::after-request="this.reset()"
+>
+    <div class="modal-body">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-floating mb-3">
+                    {{ form.name|add_class:"form-control"|attr:"autocomplete:off" }}
+                    <label for="id_name">{{ form.name.label }}</label>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <label for="id_content_type">{{ form.content_type.label }}</label>
+                {{ form.content_type|add_class:"form-control" }}
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button
+                type="button"
+                class="btn btn-light-danger text-danger font-medium"
+                data-bs-dismiss="modal"
+        >
+            Close
+        </button>
+        <button class="btn btn-primary">
+            <i class="ti ti-user-plus fs-4 me-1"></i>
+            {% if form_url == '/dashboard/category/create/' %}
+              Guardar categoria
+            {% else %}
+              Editar categoria
+            {% endif %}
+        </button>
+    </div>
+</form>

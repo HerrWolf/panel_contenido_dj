@@ -1,0 +1,82 @@
+{% for user in users %}
+    <tr id="user-row-{{ user.id }}">
+        <td>{{ user.id }}</td>
+            <td>
+                <div class="d-flex align-items-center">
+                    <img src="/{{ user.get_image }}" class="rounded-circle" width="40" height="40">
+                    <div class="ms-3">
+                        <h6 class="fs-4 fw-semibold mb-0">{{ user.username }}</h6>
+                    </div>
+                </div>
+            </td>
+            <td>{{ user.get_full_name }}</td>
+            <td>
+                {% if user.last_login %}
+                    {{ user.last_login }}
+                {% else %}
+                    No ha iniciado sesión
+                {% endif %}
+            </td>
+            <td>
+                {% for group in user.groups.all %}
+                    {{ group.name }}{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                    Sin grupos
+                {% endfor %}
+            </td>
+            <td>
+                <div class="dropdown dropstart">
+                    <a href="#" class="text-muted" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        <i class="ti ti-dots-vertical fs-6"></i>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li>
+                            <button
+                                class="dropdown-item d-flex align-items-center gap-3"
+                                hx-get="{% url 'user-list' %}?edit={{ user.id }}"
+                                hx-target="#user-form"
+                                hx-swap="outerHTML"
+                                hx-trigger="click"
+                                data-bs-toggle="modal"
+                                data-bs-target="#user-modal"
+                            >
+                            <i class="fs-4 ti ti-edit"></i>Edit
+                            </button>
+                        </li>
+                        <li>
+                            <form
+                                hx-delete="{% url 'user-delete' user.id %}"
+                                hx-target="#user-row-{{ user.id }}"
+                                hx-swap="delete"
+                                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                                hx-trigger="deleteConfirmed"
+                            >
+                                <button
+                                    class="dropdown-item d-flex align-items-center gap-3"
+                                    onclick="confirmDelete(event)"
+                                >
+                                    <i class="fs-4 ti ti-trash"></i>
+                                    Delete
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+    </tr>
+{% endfor %}
+
+{% if has_more %}
+    <tr id="loading-row"
+        hx-get="{% url 'user-list' %}?page={{ next_page }}{% if search %}&search={{ search }}{% endif %}"
+        hx-trigger="revealed"
+        hx-swap="outerHTML"
+        hx-target="#loading-row">
+        <td colspan="5" class="text-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+        </td>
+    </tr>
+{% endif %}

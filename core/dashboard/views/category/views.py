@@ -3,96 +3,95 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.decorators.http import require_http_methods
 from django.db.models import Q
+from django.views.decorators.http import require_http_methods
 
-from core.user.forms import UserForm
-from core.user.models import User
+from core.dashboard.forms import CategoryForm
+from core.dashboard.models import Category
 
 
 @login_required
-def user_list_view(request):
+def category_list_view(request):
     page = int(request.GET.get('page', 1))
     search_query = request.GET.get('search', '')
-    page_size = 10  # Number of users per page
+    page_size = 10  # Número de categorías por página
 
-    # Filter users by search query if provided
-    all_users = User.objects.all().order_by('-id')
+    # Filter categories by search query if provided
+    all_categories = Category.objects.all().order_by('-id')
     if search_query:
-        all_users = all_users.filter(
-            Q(username__icontains=search_query) |
-            Q(email__icontains=search_query) |
-            Q(first_name__icontains=search_query) |
-            Q(last_name__icontains=search_query)
+        all_categories = all_categories.filter(
+            Q(name__icontains=search_query) |
+            Q(content_type__name__icontains=search_query) |
+            Q(id__icontains=search_query)
         )
 
     # Calculate pagination
     start_index = (page - 1) * page_size
     end_index = page * page_size
-    users = all_users[start_index:end_index]
-    has_more = all_users.count() > end_index
+    categories = all_categories[start_index:end_index]
+    has_more = all_categories.count() > end_index
 
-    # If it's an HTMX request for pagination
+    # If it's an HTMX request
     if request.headers.get('HX-Request') and not (request.GET.get('create') or request.GET.get('edit')):
-        return render(request, 'user/partials/user-rows.html', {
-            'users': users,
+        return render(request, 'category/partials/category-rows.html', {
+            'categories': categories,
             'has_more': has_more,
             'next_page': page + 1,
             'search': search_query
         })
 
-    newUserForm = UserForm()
+    form = CategoryForm()
 
     # Si es una solicitud HTMX para cargar el modal de creacion
     if request.htmx and request.GET.get('create'):
-        form = UserForm()
-        form_url = reverse_lazy('user-create')
-        data= {
+        form_url = reverse_lazy('category-create-view')
+        data = {
             'form': form,
             'form_url': form_url,
-            'modal_title': 'Agregar Usuario'
+            'modal_title': 'Agregar Categoria'
         }
-        return render(request, 'user/partials/form-user.html', data)
+        return render(request, 'category/partials/form-category.html', data)
 
     # Si es una solicitud HTMX para cargar el modal de edición
     if request.htmx and request.GET.get('edit'):
-        user = User.objects.get(pk=request.GET.get('edit'))
-        form = UserForm(instance=user)
-        form_url = reverse_lazy('user-edit', kwargs={'pk': user.pk})
+        category = Category.objects.get(pk=request.GET.get('edit'))
+        form = CategoryForm(instance=category)
+        form_url = reverse_lazy('category-edit-view', kwargs={'pk': category.pk})
         data = {
             'form': form,
-            'user': user,
+            'category': category,
             'form_url': form_url,
-            'modal_title': 'Editar Usuario'
+            'modal_title': 'Editar Categoria'
         }
-        return render(request, 'user/partials/form-user.html', data)
+        return render(request, 'category/partials/form-category.html', data)
 
     data = {
-        'title': 'Listado de Usuarios',
-        'table_title': 'Listado de Usuarios',
-        'list_url': reverse_lazy('user-list'),
-        'entity': 'Usuarios',
-        'table_id': 'tbl_user',
-        'users': users,
-        'form': newUserForm,
+        'title': 'Listado de Categorias',
+        'table_title': 'Listado de Categorias',
+        'list_url': reverse_lazy('category-list-view'),
+        'entity': 'Categorias',
+        'table_id': 'tbl_category',
+        'categories': categories,
+        'form': form,
         'has_more': has_more,
         'next_page': page + 1
     }
-    return render(request, 'user/list.html', data)
+
+    return render(request, 'category/category-list.html', data)
 
 
 @login_required
-def user_create_view(request):
-    if request.method == "POST":
-        form = UserForm(request.POST, request.FILES)
+def category_create_view(request):
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
         if form.is_valid():
             form.save()
-            user = form.instance
-            response = render(request, 'user/partials/user-row.html', {'user': user})
+            category = form.instance
+            response = render(request, 'category/partials/category-row.html', {'category': category})
             response['HX-Trigger'] = json.dumps({
                 "close-modal": None,
                 "show-toast": {
-                    "message": "Usuario creado con éxito",
+                    "message": "Categoria creada con éxito",
                     "title": "Operación exitosa",
                     "type": "success"
                 }
@@ -103,71 +102,67 @@ def user_create_view(request):
             response = JsonResponse({"errors": errors}, status=400)
             response['HX-Trigger'] = json.dumps({
                 "show-toast": {
-                    "message": "Error al crear el usuario",
+                    "message": "Error al crear la categoria",
                     "title": "Operación fallida",
                     "type": "error"
                 }
             })
             return response
+    return redirect('category-list-view')
 
-    return redirect('user-list')
 
-
-@login_required
-def user_edit_view(request, pk):
-    user = User.objects.get(pk=pk)
-
-    if request.method == "POST":
-        form = UserForm(request.POST, request.FILES, instance=user)
+def category_edit_view(request, pk):
+    category = Category.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = CategoryForm(request.POST, instance=category)
         if form.is_valid():
             form.save()
-            # Renderizar el registro actualizado
-            response = render(request, 'user/partials/user-row.html', {'user': user})
+            category = form.instance
+            response = render(request, 'category/partials/category-row.html', {'category': category})
             response['HX-Trigger'] = json.dumps({
                 "close-modal": None,
                 "show-toast": {
-                    "message": "Usuario actualizado con éxito",
+                    "message": "Categoria actualizada con éxito",
                     "title": "Operación exitosa",
                     "type": "success"
                 }
             })
             return response
         else:
-            # Manejo de errores
             errors = {field: error for field, error in form.errors.items()}
             response = JsonResponse({"errors": errors}, status=400)
             response['HX-Trigger'] = json.dumps({
                 "show-toast": {
-                    "message": "Error al actualizar el usuario",
+                    "message": "Error al actualizar la categoria",
                     "title": "Operación fallida",
                     "type": "error"
                 }
             })
             return response
-
-    return redirect('user-list')
+    return redirect('category-list-view')
 
 
 @login_required
 @require_http_methods(["DELETE"])
-def user_delete_view(request, pk):
+def category_delete_view(request, pk):
     try:
-        user = User.objects.get(pk=pk)
-        user.delete()
+        category = Category.objects.get(pk=pk)
+        category.delete()
         response = HttpResponse(status=204)
         response['HX-Trigger'] = json.dumps({
             "show-toast": {
-                "message": "Usuario eliminado con éxito",
+                "message": "Categoria eliminada con éxito",
                 "title": "Operación exitosa",
                 "type": "success"
             }
         })
         return response
-    except User.DoesNotExist:
-        response = JsonResponse({"error": "Usuario no encontrado"}, status=404)
+
+    except Category.DoesNotExist:
+        response = JsonResponse({"error": "Categoria no encontrada"}, status=404)
         response['HX-Trigger'] = json.dumps({
             "show-toast": {
-                "message": "Usuario no encontrado",
+                "message": "Categoria no encontrada",
                 "title": "Operación fallida",
                 "type": "error"
             }

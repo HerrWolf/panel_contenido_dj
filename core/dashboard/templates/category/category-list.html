@@ -1,0 +1,45 @@
+{% extends 'list_base.html' %}
+{% load static %}
+
+{% block buttons_list %}
+    <div class="button-group">
+        <button type="button" class="btn mb-1 btn-lg px-4 fs-4 font-medium btn-light-primary text-primary"
+            hx-get="{% url 'category-list-view' %}?create=true"
+            hx-target="#category-form"
+            hx-swap="outerHTML"
+            hx-trigger="click"
+            data-bs-toggle="modal"
+            data-bs-target="#category-modal"
+        >
+            <i class="ti ti-plus fs-4 me-1"></i>
+            Agregar Categoria
+        </button>
+    </div>
+{% endblock %}
+
+{% block columns %}
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Tipo</th>
+        <th scope="col"></th>
+    </tr>
+{% endblock %}
+
+{% block rows %}
+    {% include 'category/partials/category-rows.html' %}
+{% endblock %}
+
+{% block f_columns %}{% endblock %}
+
+{% block custom_js %}
+    {% include 'category/partials/modal-category.html' %}
+    <script src="{% static 'category/js/list.js' %}"></script>
+
+    <script>
+        document.addEventListener('htmx:afterSwap', function(event) {
+            // Reinicializa cualquier componente que necesite ser inicializado después de cargar más elementos
+            // Por ejemplo, si utilizas tooltips, dropdowns, etc.
+        });
+    </script>
+{% endblock %}

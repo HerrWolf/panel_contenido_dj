@@ -1,7 +1,11 @@
 {% load widget_tweaks %}
+
+<!-- Actualizar el título del modal usando hx-swap-oob -->
+<h4 id="userModalLabel" hx-swap-oob="true">{{ modal_title }}</h4>
+
 <form id="user-form"
     hx-post="{{ form_url }}"
-    {% if form_url == '/users/list/' %}
+    {% if form_url == '/users/create/' %}
       hx-target="#tbl_user_body"
       hx-swap="afterbegin"
     {% else %}
