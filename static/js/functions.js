@@ -42,3 +42,8 @@ document.body.addEventListener('htmx:afterRequest', function (event) {
     }
   }
 });
+
+
+
+
+

@@ -4,12 +4,12 @@
 {% block buttons_list %}
     <div class="button-group">
         <button type="button" class="btn mb-1 btn-lg px-4 fs-4 font-medium btn-light-primary text-primary"
-            hx-get="{% url 'category-list-view' %}?create=true"
-            hx-target="#category-form"
-            hx-swap="outerHTML"
-            hx-trigger="click"
-            data-bs-toggle="modal"
-            data-bs-target="#category-modal"
+                hx-get="{% url 'category-list-view' %}?create=true"
+                hx-target="#category-form"
+                hx-swap="outerHTML"
+                hx-trigger="click"
+                data-bs-toggle="modal"
+                data-bs-target="#category-modal"
         >
             <i class="ti ti-plus fs-4 me-1"></i>
             Agregar Categoria
@@ -37,9 +37,12 @@
     <script src="{% static 'category/js/list.js' %}"></script>
 
     <script>
-        document.addEventListener('htmx:afterSwap', function(event) {
-            // Reinicializa cualquier componente que necesite ser inicializado después de cargar más elementos
-            // Por ejemplo, si utilizas tooltips, dropdowns, etc.
+        document.addEventListener('htmx:afterSwap', function (event) {
+            $(".select2").select2({
+                theme: 'bootstrap4',
+                width: '100%',
+                dropdownParent: $("#category-modal")
+            });
         });
     </script>
 {% endblock %}

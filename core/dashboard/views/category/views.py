@@ -1,4 +1,5 @@
 import json
+
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
@@ -48,7 +49,7 @@ def category_list_view(request):
         data = {
             'form': form,
             'form_url': form_url,
-            'modal_title': 'Agregar Categoria'
+            'modal_title': 'Agregar Categoría'
         }
         return render(request, 'category/partials/form-category.html', data)
 
@@ -61,15 +62,15 @@ def category_list_view(request):
             'form': form,
             'category': category,
             'form_url': form_url,
-            'modal_title': 'Editar Categoria'
+            'modal_title': 'Editar Categoría'
         }
         return render(request, 'category/partials/form-category.html', data)
 
     data = {
-        'title': 'Listado de Categorias',
-        'table_title': 'Listado de Categorias',
+        'title': 'Listado de Categorías',
+        'table_title': 'Listado de Categorías',
         'list_url': reverse_lazy('category-list-view'),
-        'entity': 'Categorias',
+        'entity': 'Categorías',
         'table_id': 'tbl_category',
         'categories': categories,
         'form': form,
@@ -113,6 +114,7 @@ def category_create_view(request):
 
 def category_edit_view(request, pk):
     category = Category.objects.get(pk=pk)
+
     if request.method == 'POST':
         form = CategoryForm(request.POST, instance=category)
         if form.is_valid():
@@ -122,7 +124,7 @@ def category_edit_view(request, pk):
             response['HX-Trigger'] = json.dumps({
                 "close-modal": None,
                 "show-toast": {
-                    "message": "Categoria actualizada con éxito",
+                    "message": "Categoría actualizada con éxito",
                     "title": "Operación exitosa",
                     "type": "success"
                 }
@@ -133,7 +135,7 @@ def category_edit_view(request, pk):
             response = JsonResponse({"errors": errors}, status=400)
             response['HX-Trigger'] = json.dumps({
                 "show-toast": {
-                    "message": "Error al actualizar la categoria",
+                    "message": "Error al actualizar la categoría",
                     "title": "Operación fallida",
                     "type": "error"
                 }
@@ -151,7 +153,7 @@ def category_delete_view(request, pk):
         response = HttpResponse(status=204)
         response['HX-Trigger'] = json.dumps({
             "show-toast": {
-                "message": "Categoria eliminada con éxito",
+                "message": "Categoría eliminada con éxito",
                 "title": "Operación exitosa",
                 "type": "success"
             }
@@ -159,10 +161,10 @@ def category_delete_view(request, pk):
         return response
 
     except Category.DoesNotExist:
-        response = JsonResponse({"error": "Categoria no encontrada"}, status=404)
+        response = JsonResponse({"error": "Categoría no encontrada"}, status=404)
         response['HX-Trigger'] = json.dumps({
             "show-toast": {
-                "message": "Categoria no encontrada",
+                "message": "Categoría no encontrada",
                 "title": "Operación fallida",
                 "type": "error"
             }

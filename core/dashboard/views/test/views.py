@@ -3,6 +3,8 @@ from django.http import JsonResponse
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from core.contenido_fuss.models import Peliculas
+from core.dashboard.models import Category
 from core.utils import get_search_parameter
 from core.app1_fuss.models import User as UserApp1Fuss, Users2 as User2App1Fuss, Contenido as App1FussContenido, \
 CatCategorias as App1FussCatCategorias
@@ -13,10 +15,6 @@ from core.media_downloader import MediaDownloader
 
 
 # Create your views here.
-class HomeView(LoginRequiredMixin, TemplateView):
-    template_name = 'home.html'
-
-
 def testAddCategory(request):
     with transaction.atomic():
         category = XuiOneStreamsCategories()
@@ -56,13 +54,22 @@ def test(request):
 
     return JsonResponse(data)
 
+
 def testGetCategories(request):
-    categorias = App1FussCatCategorias.objects.all()
-    categorias_list = list(categorias.values())
+    # categories = App1FussCatCategorias.objects.
+    categories = Category.objects.filter(content_type=11)
+    # categories_list = list(categories.values())
+    categories_list = list({
+        'id': cat.id,
+        'name': cat.name
+    } for cat in categories)
+
+    list_category_names = [cat.name for cat in categories]
 
     data = {
-        'count': categorias.count(),
-        'categorias': categorias_list,
+        'count': categories.count(),
+        'lista_nombres': list_category_names,
+        'categorias': categories_list,
     }
 
     return JsonResponse(data)
@@ -91,6 +98,7 @@ def testSeasonInfo(request, series_id, season_number):
     }
     return JsonResponse(data)
 
+
 def testEpisodeInfo(request, series_id, season_number, episode_number):
     md = MediaDownloader()
     episode_info = md.get_episode_details(series_id, season_number, episode_number)
@@ -100,3 +108,21 @@ def testEpisodeInfo(request, series_id, season_number, episode_number):
         'episode_info': episode_info,
     }
     return JsonResponse(data)
+
+
+def test_get_contenido_fuss_movies(request):
+    movies = Peliculas.objects.all()[:10]
+    movies_list = list(movies.values())
+
+    data = {
+        'count': movies.count(),
+        'movies': movies_list,
+    }
+
+    return JsonResponse(data)
+
+
+
+
+
+

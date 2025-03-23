@@ -1,0 +1,121 @@
+{% extends 'list_base.html' %}
+{% load static %}
+
+{% block buttons_list %}
+    <div class="button-group">
+        <button type="button" class="btn mb-1 btn-lg px-4 fs-4 font-medium btn-light-primary text-primary"
+                hx-get="{% url 'movie-list-view' %}?create=true"
+                hx-target="#movie-form"
+                hx-swap="outerHTML"
+                hx-trigger="click"
+                data-bs-toggle="modal"
+                data-bs-target="#movie-modal"
+        >
+            <i class="ti ti-plus fs-4 me-1"></i>
+            Agregar Película
+        </button>
+    </div>
+{% endblock %}
+
+{% block columns %}
+    <tr>
+        <th scope="col">Info</th>
+        <th scope="col">Estado</th>
+        <th scope="col"></th>
+    </tr>
+{% endblock %}
+
+{% block rows %}
+    {% for movie in movies %}
+        <tr id="movie-row-{{ movie.id }}">
+            <td class="ps-0">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="flex-shrink-0">
+                        <img src="{{ movie.poster_url }}" class="rounded" alt="p1"
+                             width="80">
+                    </div>
+                    <div>
+                        <h6 class="mb-0 fw-semibold">{{ movie.title }}</h6>
+                        <p class="mb-0 fs-2">TMDB: {{ movie.tmdb_id }}</p>
+                        <p class="mb-0 fs-2">Año: {{ movie.release_date|slice:":4" }}</p>
+                        <p class="mb-0 fs-2">{{ movie.get_audio_display }}</p>
+                    </div>
+                </div>
+            </td>
+            <td>
+                {% if movie.state == 'catalogo' %}
+                    <span class="mb-1 badge font-medium bg-light-primary text-primary">Catalogo</span>
+                {% else %}
+                    <span class="mb-1 badge font-medium bg-light-success text-success">Estreno</span>
+                {% endif %}
+            </td>
+            <td>
+                <div class="dropdown dropstart">
+                    <a href="#" class="text-muted" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        <i class="ti ti-dots-vertical fs-6"></i>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li>
+                            <button
+                                    class="dropdown-item d-flex align-items-center gap-3"
+                                    hx-get="{% url 'movie-list-view' %}?edit={{ movie.id }}"
+                                    hx-target="#movie-form"
+                                    hx-swap="outerHTML"
+                                    hx-trigger="click"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#movie-modal"
+                            >
+                                <i class="fs-4 ti ti-edit"></i>Edit
+                            </button>
+                        </li>
+                        <li>
+                            <form
+                                    hx-delete="{% url 'movie-delete-view' movie.id %}"
+                                    hx-target="#movie-row-{{ movie.id }}"
+                                    hx-swap="delete"
+                                    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                                    hx-trigger="deleteConfirmed"
+                            >
+                                <button
+                                        class="dropdown-item d-flex align-items-center gap-3"
+                                        onclick="confirmDelete(event)"
+                                >
+                                    <i class="fs-4 ti ti-trash"></i>
+                                    Delete
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+
+    {% if has_more %}
+        <tr id="loading-row"
+            hx-get="{% url 'movie-list-view' %}?page={{ next_page }}{% if search %}&search={{ search }}{% endif %}"
+            hx-trigger="revealed"
+            hx-swap="outerHTML"
+            hx-target="#loading-row">
+            <td colspan="4" class="text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+            </td>
+        </tr>
+    {% endif %}
+{% endblock %}
+
+{% block f_columns %}{% endblock %}
+
+{% block custom_js %}
+    {% include 'movie/partials/modal-movie.html' %}
+    <script src="{% static 'movie/js/list.js' %}"></script>
+
+    <script>
+        //document.addEventListener('htmx:afterSwap', function (event) {
+
+        //});
+    </script>
+{% endblock %}

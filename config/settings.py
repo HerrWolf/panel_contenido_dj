@@ -55,7 +55,8 @@ INSTALLED_APPS = [
     'core.app1_fuss',
     'core.xui',
     'core.xui_one',
-    'core.app1_bixi'
+    'core.app1_bixi',
+    'core.contenido_fuss'
 ]
 
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'

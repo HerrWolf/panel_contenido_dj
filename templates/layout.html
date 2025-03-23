@@ -16,6 +16,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/png" href="{% static 'modernize/dist/images/logos/favicon.ico' %}"/>
+    <link rel="stylesheet" href="{% static 'modernize/dist/libs/select2/dist/css/select2.min.css' %}">
     <!-- Core Css -->
     <link rel="stylesheet" href="{% static 'modernize/dist/css/style-dark.min.css' %}"/>
 
@@ -28,6 +29,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css" />
 
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <script src="https://unpkg.com/hyperscript.org@0.9.14"></script>
 
     <!-- Vendors Css -->
     {% block vendor_css %}{% endblock %}
@@ -116,9 +118,9 @@
     <!-- Sweet Alert JS -->
     <script src="{% static 'modernize/dist/libs/sweetalert2/dist/sweetalert2.min.js' %}"></script>
 
-    <!-- JQuery Confirm JS -->
-
-    <script src="{% static 'lib/jquery-confirm-v3.3.4/jquery-confirm.min.js' %}"></script>
+    <script src="{% static 'modernize/dist/libs/select2/dist/js/select2.full.min.js' %}"></script>
+    <script src="{% static 'modernize/dist/libs/select2/dist/js/select2.min.js' %}"></script>
+{#    <script src="{% static 'modernize/dist/js/forms/select2.init.js' %}"></script>#}
 
 
     <script>

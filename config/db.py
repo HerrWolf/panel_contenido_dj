@@ -16,6 +16,14 @@ DB_SYSTEM = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db/sqlite/db.sqlite3'),
     },
+    'contenido_fuss_db': {  # Tercera base de datos externa
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': config('CONTENIDO_FUSS_DB_NAME'),
+        'USER': config('CONTENIDO_FUSS_DB_USER'),
+        'PASSWORD': config('CONTENIDO_FUSS_DB_PASSWORD'),
+        'HOST': config('CONTENIDO_FUSS_DB_HOST'),
+        'PORT': '3306',
+    },
     'app1_fuss_db': {  # Primera base de datos externa
         'ENGINE': 'django.db.backends.mysql',
         'NAME': config('APP1_FUSS_DB_NAME'),

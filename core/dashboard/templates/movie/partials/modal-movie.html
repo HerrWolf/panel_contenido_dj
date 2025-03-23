@@ -1,0 +1,45 @@
+{% load widget_tweaks %}
+<div
+        class="modal fade"
+        id="movie-modal"
+        tabindex="-1"
+        aria-labelledby="movieModalLabel"
+>
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex align-items-center">
+                <h4 class="modal-title" id="movieModalLabel">
+                    Agregar Pelicula
+                </h4>
+                <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                ></button>
+            </div>
+            <div id="movie-form"></div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+// Quita el evento DOMContentLoaded y usa el evento de Bootstrap modal.shown
+document.getElementById('movie-modal').addEventListener('shown.bs.modal', function() {
+    console.log("Modal abierto - verificando categorías");
+    const selectElement = document.getElementById('id_categories');
+
+    if (selectElement) {
+        console.log("Select encontrado");
+        console.log("Opciones totales:", selectElement.options.length);
+
+        // Verificar opciones seleccionadas
+        const selectedOptions = Array.from(selectElement.selectedOptions || []).map(o => o.value);
+        console.log("Opciones seleccionadas:", selectedOptions);
+    } else {
+        console.error("Select no encontrado en el modal!");
+        console.log("Elementos dentro del modal:", document.querySelector('#movie-modal .modal-content').innerHTML);
+    }
+});
+</script>

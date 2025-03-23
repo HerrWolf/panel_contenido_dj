@@ -1,0 +1,118 @@
+{% load widget_tweaks %}
+
+<!-- Actualizar el título del modal usando hx-swap-oob -->
+<h4 id="movieModalLabel" hx-swap-oob="true">{{ modal_title }}</h4>
+
+<form id="movie-form"
+      hx-post="{{ form_url }}"
+        {% if form_url == '/dashboard/movie/create/' %}
+      hx-target="#tbl_movie_body"
+      hx-swap="afterbegin"
+        {% else %}
+      hx-target="#movie-row-{{ movie.id }}"
+      hx-swap="outerHTML"
+        {% endif %}
+      hx-on:after-request="this.reset()"
+>
+    <div class="modal-body">
+        {% csrf_token %}
+        <div class="row mb-3">
+            <div class="col-md-2">
+                <div class="form-floating mb-3">
+                    {{ form.tmdb_id|add_class:"form-control"|attr:"autocomplete:off"|attr:"hx-get:/dashboard/movie/fetch/"|attr:"hx-trigger:keyup changed delay:800ms"|attr:"hx-target:#movie-form"|attr:"hx-swap:none" }}
+                    <label for="id_name">{{ form.tmdb_id.label }}</label>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-floating mb-3">
+                    {{ form.title|add_class:"form-control"|attr:"autocomplete:off" }}
+                    <label for="id_name">{{ form.title.label }}</label>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-floating mb-3">
+                    {{ form.original_title|add_class:"form-control"|attr:"autocomplete:off" }}
+                    <label for="id_name">{{ form.original_title.label }}</label>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-floating mb-3">
+                    {{ form.release_date|add_class:"form-control"|attr:"autocomplete:off" }}
+                    <label for="id_name">{{ form.release_date.label }}</label>
+                </div>
+            </div>
+
+            <div id="movie-list-results" class="col-md-12"></div>
+
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="id_content_type">{{ form.state.label }}</label>
+                        {{ form.state|add_class:"form-control" }}
+                    </div>
+                    <div class="col-md-12">
+                        <label for="id_content_type">{{ form.audio.label }}</label>
+                        {{ form.audio|add_class:"form-control" }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <label for="id_categories">{{ form.categories.label }}</label>
+                {{ form.categories }}
+            </div>
+
+        </div>
+
+        <div class="row mb-3">
+            <div id="movie-category-example" class="col-md-12"></div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <div class="form-floating mb-3">
+                    {{ form.overview|add_class:"form-control"|attr:"autocomplete:off"|attr:"rows:3" }}
+                    <label for="id_name">{{ form.overview.label }}</label>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-floating mb-3">
+                    {{ form.video_path|add_class:"form-control"|attr:"autocomplete:off" }}
+                    <label for="id_name">{{ form.video_path.label }}</label>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-floating mb-3">
+                    {{ form.poster_url|add_class:"form-control"|attr:"autocomplete:off" }}
+                    <label for="id_name">{{ form.poster_url.label }}</label>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-floating mb-3">
+                    {{ form.backdrop_url|add_class:"form-control"|attr:"autocomplete:off" }}
+                    <label for="id_name">{{ form.backdrop_url.label }}</label>
+                </div>
+            </div>
+            <div id="poster-view" class="col-md-12"></div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button
+                type="button"
+                class="btn btn-light-danger text-danger font-medium"
+                data-bs-dismiss="modal"
+        >
+            Close
+        </button>
+        <button class="btn btn-primary">
+            <i class="ti ti-user-plus fs-4 me-1"></i>
+            {% if form_url == '/dashboard/movie/create/' %}
+                Guardar pelicula
+            {% else %}
+                Editar pelicula
+            {% endif %}
+        </button>
+    </div>
+</form>
+
+

@@ -1,0 +1,25 @@
+<!-- movie/partials/resultados-busqueda.html -->
+{% if results %}
+    <div class="list-group mb-3">
+        {% for movie in results %}
+            <button type="button"
+                    class="list-group-item list-group-item-action"
+                    hx-get="{% url 'pelicula_llenar_formulario' %}"
+                    hx-target="#movie-form"
+                    hx-swap="none"
+                    hx-vals='{"tmdb_id": "{{ movie.id }}"}'>
+                <div class="d-flex align-items-center">
+                    {% if movie.poster_path %}
+                        <img src="https://image.tmdb.org/t/p/w92{{ movie.poster_path }}" class="me-3" width="46">
+                    {% endif %}
+                    <div>
+                        <h6 class="mb-0">{{ movie.title }}</h6>
+                        <small class="text-muted">{{ movie.release_date|default:"Sin fecha" }}</small>
+                    </div>
+                </div>
+            </button>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info">No se encontraron películas con ese título.</div>
+{% endif %}
